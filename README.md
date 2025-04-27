@@ -28,7 +28,7 @@ This project analyzes sports videos to track player movements, assign team color
     ```sh
     pip install -r requirements.txt
     ```
-
+3. Install the Model here (https://drive.google.com/drive/folders/1ArcHQ-5IByonmNFbwudbHJiPf83TlX2z?usp=sharing) and put the model at models folder
 ## Usage
 
 1. Place your input video in the [input_videos](http://_vscodecontentref_/3) directory.
