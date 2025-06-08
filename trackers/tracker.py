@@ -7,12 +7,47 @@ import pandas as pd
 import cv2
 import sys 
 sys.path.append('../')
-from utils import get_center_of_bbox, get_bbox_width, get_foot_position
+from my_utils import get_center_of_bbox, get_bbox_width, get_foot_position
+import torch
+from trackers.gallery_manager import GalleryManager
+from strongsort import StrongSORT 
 
 class Tracker:
-    def __init__(self, model_path):
-        self.model = YOLO(model_path) 
-        self.tracker = sv.ByteTrack()
+    def __init__(self, model_path, reid_model_path, reid_data_path, gallery_manager):
+        self.model = YOLO(model_path) # pastikan strong_sort sudah diinstall
+
+        # Load PRTReid model
+        if reid_model_path:
+            self.reid_model = torch.load(reid_model_path, map_location='cpu')
+            self.reid_model.eval()
+        else:
+            self.reid_model = None
+            print("❌ PRTReid model path is not provided. Skipping ReID.")
+
+        # Load label encoder or other data if needed
+        if reid_data_path:
+            import pickle
+            with open(reid_data_path, 'rb') as f:
+                self.reid_data = pickle.load(f)
+        else:
+            self.reid_data = None
+            print("❌ ReID data path is not provided. Skipping ReID data loading.")
+
+        device = "cpu"  # atau "cuda" jika pakai GPU
+        fp16 = False
+        self.tracker = StrongSORT(model_weights=reid_data, device=device, fp16=fp16)
+        self.gallery_manager = gallery_manager
+
+    def extract_embedding(self, frame, bbox):
+        if self.reid_model is None:
+            return None
+        x1, y1, x2, y2 = map(int, bbox)
+        crop = frame[y1:y2, x1:x2]
+        crop = cv2.resize(crop, (128, 256))
+        crop = torch.from_numpy(crop).permute(2,0,1).unsqueeze(0).float() / 255.0
+        with torch.no_grad():
+            embedding = self.reid_model(crop).cpu().numpy().flatten()
+        return embedding
 
     def add_position_to_tracks(sekf,tracks):
         for object, object_tracks in tracks.items():
@@ -59,6 +94,9 @@ class Tracker:
             "referees":[],
             "ball":[]
         }
+        # Initialize Gallery Manager if not provided
+
+        prev_ids = set()
 
         for frame_num, detection in enumerate(detections):
             cls_names = detection.names
@@ -79,23 +117,47 @@ class Tracker:
             tracks["referees"].append({})
             tracks["ball"].append({})
 
+            current_ids = set()
             for frame_detection in detection_with_tracks:
                 bbox = frame_detection[0].tolist()
                 cls_id = frame_detection[3]
                 track_id = frame_detection[4]
 
                 if cls_id == cls_names_inv['player']:
-                    tracks["players"][frame_num][track_id] = {"bbox":bbox}
-                
+                    # Extract embedding
+                    embedding = self.extract_embedding(frames[frame_num], bbox)
+                    # ReID: check gallery
+                    if self.gallery_manager and embedding is not None:
+                        matched_id = self.gallery_manager.match(embedding)
+                        if matched_id is not None:
+                            track_id = matched_id
+                    tracks["players"][frame_num][track_id] = {"bbox": bbox, "embedding": embedding}
+                    current_ids.add(track_id)
+
                 if cls_id == cls_names_inv['referee']:
-                    tracks["referees"][frame_num][track_id] = {"bbox":bbox}
-            
+                    tracks["referees"][frame_num][track_id] = {"bbox": bbox}
+                    current_ids.add(track_id)
+
+            # Ball detection as before
             for frame_detection in detection_supervision:
                 bbox = frame_detection[0].tolist()
                 cls_id = frame_detection[3]
-
                 if cls_id == cls_names_inv['ball']:
-                    tracks["ball"][frame_num][1] = {"bbox":bbox}
+                    tracks["ball"][frame_num][1] = {"bbox": bbox}
+
+            # Gallery update: add lost tracks
+            if self.gallery_manager:
+                lost_ids = prev_ids - current_ids
+                for lost_id in lost_ids:
+                    # Find last embedding/info for lost_id
+                    for prev_frame in reversed(tracks["players"][:frame_num]):
+                        if lost_id in prev_frame:
+                            emb = prev_frame[lost_id].get("embedding")
+                            info = prev_frame[lost_id]
+                            if emb is not None:
+                                self.gallery_manager.add(lost_id, emb, info)
+                            break
+                prev_ids = current_ids
 
         if stub_path is not None:
             with open(stub_path,'wb') as f:

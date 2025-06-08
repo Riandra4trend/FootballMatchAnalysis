@@ -1,4 +1,4 @@
-from utils import read_video, save_video
+from my_utils import read_video, save_video
 from trackers import Tracker
 import cv2
 import numpy as np
@@ -7,18 +7,32 @@ from player_ball_assigner import PlayerBallAssigner
 from camera_movement_estimator import CameraMovementEstimator
 from view_transformer import ViewTransformer
 from speed_and_distance_estimator import SpeedAndDistance_Estimator
+from trackers import GalleryManager
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'yolov5'))
 
 
 def main():
     # Read Video
-    video_frames = read_video('input_videos/08fd33_4.mp4')
+    video_frames = read_video('input_video/08fd33_4.mp4')
 
-    # Initialize Tracker
-    tracker = Tracker('models/best.pt')
+    # Initialize GalleryManager
+    gallery_manager = GalleryManager(threshold=0.6)
 
-    tracks = tracker.get_object_tracks(video_frames,
-                                       read_from_stub=True,
-                                       stub_path='stubs/track_stubs.pkl')
+    # Initialize Tracker with StrongSORT+PRTReid
+    tracker = Tracker(
+        'models/best.pt',
+        reid_model_path='models/job-0_20_model.pth.tar',
+        reid_data_path='models/job-0_20_model.pth/data.pkl',
+        gallery_manager=gallery_manager
+    )
+
+    tracks = tracker.get_object_tracks(
+        video_frames,
+        read_from_stub=True,
+        stub_path='stubs/track_stubs.pkl'
+    )
     # Get object positions 
     tracker.add_position_to_tracks(tracks)
 
@@ -81,7 +95,7 @@ def main():
     speed_and_distance_estimator.draw_speed_and_distance(output_video_frames,tracks)
 
     # Save video
-    save_video(output_video_frames, 'output_videos/output_video.avi')
+    save_video(output_video_frames, 'output_videos/output_video_new.avi')
 
 if __name__ == '__main__':
     main()
