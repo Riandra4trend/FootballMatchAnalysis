@@ -1,18 +1,17 @@
 import os
-from pathlib import Path
-
 import rich.logging
 import torch
 import hydra
 import warnings
 import logging
 
-from tracklab.datastruct import TrackerState
-from tracklab.pipeline import Pipeline
-from tracklab.utils import monkeypatch_hydra, progress, wandb
-
+from tracklab.utils import monkeypatch_hydra, \
+    progress  # needed to avoid complex hydra stacktraces when errors occur in "instantiate(...)"
 from hydra.utils import instantiate
 from omegaconf import OmegaConf
+from tracklab.datastruct import TrackerState
+from tracklab.pipeline import Pipeline
+from tracklab.utils import wandb
 
 
 os.environ["HYDRA_FULL_ERROR"] = "1"
@@ -29,8 +28,6 @@ def main(cfg):
     tracking_dataset = instantiate(cfg.dataset)
     evaluator = instantiate(cfg.eval, tracking_dataset=tracking_dataset)
 
-    log.info(f"{tracking_dataset}")
-
     modules = []
     if cfg.pipeline is not None:
         for name in cfg.pipeline:
@@ -43,7 +40,7 @@ def main(cfg):
     # Train tracking modules
     for module in modules:
         if module.training_enabled:
-            module.train(tracking_dataset, pipeline, evaluator, OmegaConf.to_container(cfg.dataset, resolve=True))
+            module.train()
 
     # Test tracking
     if cfg.test_tracking:
@@ -68,7 +65,7 @@ def main(cfg):
         if tracker_state.save_file is not None:
             log.info(f"Saved state at : {tracker_state.save_file.resolve()}")
 
-    close_environment()
+    close_enviroment()
 
     return 0
 
@@ -83,12 +80,11 @@ def init_environment(cfg):
     # For Hydra and Slurm compatibility
     progress.use_rich = cfg.use_rich
     set_sharing_strategy()  # Do not touch
-    if torch.backends.mps.is_available():
-        device = "mps"
-    elif torch.cuda.is_available():
-        device = "cuda"
-    else:
-        device = "cpu"
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    log.info(f"Using device: '{device}'.")
+    wandb.init(cfg)
+    if cfg.print_config:
+        log.info(OmegaConf.to_yaml(cfg))
     if cfg.use_rich:
         for handler in log.root.handlers:
             if type(handler) is logging.StreamHandler:
@@ -99,24 +95,18 @@ def init_environment(cfg):
         for handler in log.root.handlers:
             if type(handler) is logging.StreamHandler:
                 handler.setLevel(logging.INFO)
-    wandb.init(cfg)
-    log.info(f"Run directory: {Path().absolute()}")
-    log.info(f"Using device: '{device}'.")
-
-    if cfg.print_config:
-        log.info(OmegaConf.to_yaml(cfg))
     return device
 
 
-def close_environment():
+def close_enviroment():
     wandb.finish()
 
 
 def evaluate(cfg, evaluator, tracker_state):
-    if cfg.get("eval_tracking", True):  # and cfg.dataset.nframes == -1:
+    if cfg.get("eval_tracking", True) and cfg.dataset.nframes == -1:
         log.info("Starting evaluation.")
         evaluator.run(tracker_state)
-    elif not cfg.get("eval_tracking", True):
+    elif cfg.get("eval_tracking", True) == False:
         log.warning("Skipping evaluation because 'eval_tracking' was set to False.")
     else:
         log.warning(

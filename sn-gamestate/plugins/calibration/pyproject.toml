@@ -1,20 +1,20 @@
-[project]
+[tool.poetry]
 name = "tracklab-calibration"
 version = "1.0.2"
 description = ""
-authors = [
-    {name="Victor Joos", email="victor.joos@uclouvain.be"}
+authors = ["Victor Joos <victor.joos@uclouvain.be>"]
+packages = [
+    {include = "sn_calibration_baseline"},
+    {include = "tvcalib"},
+    {include = "nbjw_calib"}
 ]
-requires-python = ">=3.9,<3.10"
-dependencies = [
-    "kornia==0.6.3",
-    "lsq-ellipse>=2.2.1"
-]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+kornia = "0.6.3"
+lsq-ellipse = ">=2.2.1"
+
 
 [build-system]
-requires = ["setuptools>=42"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["sn_calibration_baseline", "tvcalib", "nbjw_calib"]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

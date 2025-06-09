@@ -1,4 +1,4 @@
 from .callback import Callback
-from .handle_regions import IgnoredRegions
 from .progress import Progressbar, RichProgressbar
+from .handle_regions import IgnoredRegions
 from .timer import Timer

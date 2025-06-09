@@ -1,31 +1,28 @@
-import json
 import os
+import json
 import tempfile
 from pathlib import Path
 
+import torch
 import numpy as np
 import pandas as pd
-import torch
 from tabulate import tabulate
-from tracklab.pipeline import Evaluator as EvaluatorBase
+
+from tracklab.core import Evaluator as EvaluatorBase
 from tracklab.utils import wandb
 
-try:
-    import posetrack21
-    import posetrack21_mot
-    from poseval.eval_helpers import (
-        load_data_dir,
-        Joint,
-        mapmetrics2dict,
-        precmetrics2dict,
-        recallmetrics2dict,
-        motmetrics2dict,
-    )
-    from poseval.evaluateAP import evaluateAP
-    from poseval.evaluateTracking import evaluateTracking
-except ImportError:
-    posetrack21 = None
-
+import posetrack21
+import posetrack21_mot
+from poseval.eval_helpers import (
+    load_data_dir,
+    Joint,
+    mapmetrics2dict,
+    precmetrics2dict,
+    recallmetrics2dict,
+    motmetrics2dict,
+)
+from poseval.evaluateAP import evaluateAP
+from poseval.evaluateTracking import evaluateTracking
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
 
 import logging

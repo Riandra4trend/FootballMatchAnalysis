@@ -2,9 +2,11 @@ from abc import abstractmethod
 from typing import Any
 
 import pandas as pd
-from torch.utils.data.dataloader import default_collate, DataLoader
+
 from tracklab.datastruct import EngineDatapipe
 from tracklab.pipeline import Module
+
+from torch.utils.data.dataloader import default_collate, DataLoader
 
 
 class DetectionLevelModule(Module):

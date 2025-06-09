@@ -1,12 +1,11 @@
-import io
-import logging
-from contextlib import redirect_stdout
-from pathlib import Path
-
 import numpy as np
+import logging
 import trackeval
+
+from pathlib import Path
 from tabulate import tabulate
-from tracklab.pipeline import Evaluator as EvaluatorBase
+from tracklab.core import Evaluator as EvaluatorBase
+from tracklab.utils import wandb
 
 log = logging.getLogger(__name__)
 
@@ -20,7 +19,7 @@ class TrackEvalEvaluator(EvaluatorBase):
         self.cfg = cfg
         self.tracking_dataset = tracking_dataset
         self.eval_set = eval_set
-        self.trackeval_dataset_name = type(self.tracking_dataset).__name__
+        self.trackeval_dataset_name = cfg.dataset.dataset_class
         self.trackeval_dataset_class = getattr(trackeval.datasets, cfg.dataset.dataset_class)
         self.show_progressbar = show_progressbar
         self.dataset_path = dataset_path
@@ -35,7 +34,7 @@ class TrackEvalEvaluator(EvaluatorBase):
         pred_save_path = Path(self.cfg.dataset.TRACKERS_FOLDER) / f"{self.trackeval_dataset_name}-{self.eval_set}" / tracker_name
         self.tracking_dataset.save_for_eval(
             tracker_state.detections_pred,
-            tracker_state.image_metadatas,
+            tracker_state.image_pred,
             tracker_state.video_metadatas,
             pred_save_path,
             self.cfg.bbox_column_for_eval,
@@ -56,7 +55,7 @@ class TrackEvalEvaluator(EvaluatorBase):
         if self.cfg.save_gt:
             self.tracking_dataset.save_for_eval(
                 tracker_state.detections_gt,
-                tracker_state.image_metadatas,
+                tracker_state.image_gt,
                 tracker_state.video_metadatas,
                 gt_save_path,
                 self.cfg.bbox_column_for_eval,
@@ -92,22 +91,18 @@ class TrackEvalEvaluator(EvaluatorBase):
         # Build evaluator
         eval_config = trackeval.Evaluator.get_default_eval_config()
         for key, value in self.cfg.eval.items():
-            if key == "NUM_PARALLEL_CORES":
-                value = max(1, int(value))
             eval_config[key] = value
         evaluator = trackeval.Evaluator(eval_config)
 
         # Run evaluation
-        with redirect_stdout(io.StringIO()) as stream:
-            output_res, output_msg = evaluator.evaluate([dataset], metrics_list, show_progressbar=self.show_progressbar)
-        printed_results = stream.getvalue()
-        log.info(printed_results)
+        output_res, output_msg = evaluator.evaluate([dataset], metrics_list, show_progressbar=self.show_progressbar)
 
         # Log results
         results = output_res[dataset.get_name()][tracker_name]
         # if the dataset has the process_trackeval_results method, use it to process the results
         if hasattr(self.tracking_dataset, 'process_trackeval_results'):
-            self.tracking_dataset.process_trackeval_results(results, dataset_config, eval_config)
+            results = self.tracking_dataset.process_trackeval_results(results, dataset_config, eval_config)
+        wandb.log(results)
 
 def _print_results(
     res_combined,

@@ -1,6 +1,6 @@
 import pycocotools
 
-from tracklab.pipeline import Evaluator
+from tracklab.core import Evaluator
 
 
 class SoccerAccuracy(Evaluator):

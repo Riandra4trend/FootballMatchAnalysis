@@ -61,11 +61,9 @@ be happy to help with detailed instructions.
 - [x] Further details provided about the new Game State Reconstruction evaluation metric
 - [x] [Live tutorials on how to start with the challenge and the baseline](https://www.youtube.com/watch?v=Ir-6D3j_lkA&t=1553s)
 - [x] Release of the [SoccerNet Game State Reconstruction paper](https://arxiv.org/abs/2404.11335) with detailed information about the task, dataset, baseline and evaluation metric.
-- [x] Release of the new visualization tool (cf. demo video and gif)
-- [x] Facilitation of the installation using [uv](https://docs.astral.sh/uv/).
+- [ ] Release of new visualization tool (cf. demo video and gif)
 
 #### Updates:
-- [2025.05.02] Installation using uv and release of the new visualization tool.
 - [2024.07.10] Addition of ["PnLCalib"](https://github.com/mguti97/PnLCalib) and ["No Bells, Just Whistles"](https://github.com/mguti97/No-Bells-Just-Whistles) calibration.
 To test, use "pnlcalib" or "nbjw_calib" instead of "tvcalib" in `soccernet.yaml`, for `pitch` and `calibration`.
 - [2024.05.13] V1.3 of the dataset released with updated bbox-pitch annotations.
@@ -148,36 +146,44 @@ Tracklab will create a `.mp4` video showcasing the game state reconstruction res
 ### 1. Installing TrackLab and the GameState baseline 
 Before running the baseline for the first time, you will need to clone the project and setup the environment as described below.
 
-#### Clone the sn-gamestate repository
-First git clone this repository: 
+#### Clone the repositories
+First git clone this repository, and the [TrackLab framework](https://github.com/TrackingLaboratory/tracklab) *in adjacent directories* : 
 ```bash
+mkdir soccernet
+cd soccernet
 git clone https://github.com/SoccerNet/sn-gamestate.git
+git clone https://github.com/TrackingLaboratory/tracklab.git
 ```
 
-#### [Recommended] Option 1: Install using UV
-1. Install uv : https://docs.astral.sh/uv/getting-started/installation/
+> [!NOTE]
+> If you are using an IDE (like PyCharm or VS Code), we suggest creating a single project with `soccernet` as root directory.
+> Instructions : [PyCharm](https://www.jetbrains.com/help/pycharm/configuring-project-structure.html) and [VS Code](https://code.visualstudio.com/docs/editor/multi-root-workspaces)
+
+#### Option 1: Install using Poetry
+1. Install poetry : https://python-poetry.org/docs/#installing-with-the-official-installer
 2. Install the dependencies : 
 ```bash
 cd sn-gamestate
-uv venv --python 3.9
-uv pip install -e .
-uv run mim install mmcv==2.0.1
+poetry install
+poetry run mim install mmcv==2.0.1
+poetry shell
 ```
 
-To enter the virtual environment created by uv, you can either use `source .venv/bin/activate`,
-or prefix all commands by `uv run`.
+To enter the virtual environment created by Poetry, you can either use `poetry shell`,
+or prefix all commands by `poetry run`.
 
 #### Option 2: Install using conda
 1. Install conda : https://docs.conda.io/projects/miniconda/en/latest/
 2. Create a new conda environment : 
 ```bash 
-conda create -n tracklab pip python=3.9 pytorch==1.13.1 torchvision==0.14.1 pytorch-cuda=11.7 -c pytorch -c nvidia -y
+conda create -n tracklab pip python=3.10 pytorch==1.13.1 torchvision==0.14.1 pytorch-cuda=11.7 -c pytorch -c nvidia -y
 conda activate tracklab
 ```
 3. Install all the dependencies with : 
 ```bash
 cd sn-gamestate
 pip install -e .
+pip install -e ../tracklab
 mim install mmcv==2.0.1
 ```
 
@@ -190,7 +196,7 @@ git -C ../tracklab pull
 ```
 
 After updating, you should rerun the installation of the dependencies in case they are updated 
-(either running `uv run -U -cn soccernet` or `pip install -U -e .`).
+(either running `poetry install` or *both* `pip install`'s).
 
 We will advertise big updates on the [soccernet discord](https://discord.com/invite/cPbqf2mAwF).
 
@@ -262,14 +268,14 @@ You will need to set up some variables before running the code in [soccernet.yam
 #### Command Line
 Finally, run the SoccerNet Game State Reconstruction baseline with the following command :
 ```bash
-uv run tracklab -cn soccernet
+python -m tracklab.main -cn soccernet
 ```
 By default, this command will perform game state reconstruction on one SoccerNet validation sequence, display results in a .mp4 video saved on disk and print the final performance metric.
 As a reminder, the dataset and all model's weights will be downloaded automatically on the first run.
 
 You can find all possible configuration groups at the top when running the following command :  
 ```bash
-uv run tracklab --help
+python -m tracklab.main --help
 ```
 
 You can have a look at the default parameters in [soccernet.yaml](sn_gamestate/configs/soccernet.yaml).
@@ -306,33 +312,8 @@ We provide the Tracker State of the baseline for the [validation set](https://ze
 We employ a [SoccerNet fork](https://github.com/SoccerNet/sn-trackeval) of the [official TrackEval](https://github.com/JonathonLuiten/TrackEval) library to evaluate the GS-HOTA performance.
 Evaluation is performed automatically when using our TrackLab library, but you can still perform evaluation within your own codebase using our [TrackEval fork](https://github.com/SoccerNet/sn-trackeval) (more information in the fork README).
 
-
-### Contributing or adapting Tracklab
-
-If you'd like to contribute to sn-gamestate or tracklab (or you want to change Tracklab behaviors),
-you'll need to install a local tracklab version, in the parent directory next to sn-gamestate : 
-```bash
-git clone https://github.com/TrackingLaboratory/tracklab.git
-```
-You then can point you existing sn-gamestate installation to this local version:
-```bash
-cd sn-gamestate
-uv add ../tracklab
-```
-To watch changes, you have to add this section to the sn-gamestate [pyproject.toml](pyproject.toml):
-```toml
-[tool.uv]
-reinstall-package = ["tracklab"]
-```
-
-If you're working on a slow drive, you can also manipulate the python `sys.path` :
-```bash
-echo "/absolute/path/to/tracklab" > .venv/lib/python3.9/site-packages/tracklab_dev.pth
-```
-
-
 ## Troubleshooting
-If you encounter issues after upgrading to the latest version, do not forget to run `uv run -U tracklab -cn soccernet` and `uv pip install -e .` to keep your environment up to date.
+If you encounter issues after upgrading to the latest version, do not forget to run `poetry install`  or `pip install -e .` and `pip install -e ../tracklab` to keep your environment up to date.
 Feel free to open a GitHub issue or contact us on Discord if you need further assistance.
 
 ### FAQ
@@ -340,7 +321,7 @@ We will try to gather interesting questions and answer them in the [FAQ](FAQ.md)
 
 ## References
 
- - Bbox detection : YOLOv11 [[Code](https://github.com/ultralytics/ultralytics)]
+ - Bbox detection : YOLOv8 [[Code](https://github.com/ultralytics/ultralytics)]
  - Re-Identification : PRTReid [[Paper](https://arxiv.org/abs/2401.09942)] [[Code](https://github.com/VlSomers/Prtreid)] | BPBreID [[Paper](https://arxiv.org/abs/2211.03679)][[Code](https://github.com/VlSomers/bpbreid)]
  - Camera calibration & field localisation : TVCalib [[Paper](https://arxiv.org/abs/2207.11709)] [[Code](https://github.com/MM4SPA/tvcalib/tree/main)]
  - Jersey number recognition : MMOCR [[Paper](https://arxiv.org/abs/2108.06543)] [[Code](https://github.com/open-mmlab/mmocr)]

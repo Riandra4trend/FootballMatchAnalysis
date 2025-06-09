@@ -10,7 +10,7 @@ use_keypoints_visibility_scores_for_reid: False
 training_enabled: False
 cfg:
   project:
-    name: "TrackLab"
+    name: "PbTrack"
     experiment_name: ""
     notes: ""
     tags: []

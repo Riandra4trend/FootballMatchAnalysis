@@ -1,23 +1,20 @@
 import os
-
 import numpy as np
 from tabulate import tabulate
-from tracklab.pipeline import Evaluator as EvaluatorBase
+
+from tracklab.core import Evaluator as EvaluatorBase
 from tracklab.utils import wandb
 
-try:
-    from poseval.eval_helpers import (
-        load_data_dir,
-        Joint,
-        mapmetrics2dict,
-        precmetrics2dict,
-        recallmetrics2dict,
-        motmetrics2dict,
-    )
-    from poseval.evaluateAP import evaluateAP
-    from poseval.evaluateTracking import evaluateTracking
-except ImportError:
-    poseval = None
+from poseval.eval_helpers import (
+    load_data_dir,
+    Joint,
+    mapmetrics2dict,
+    precmetrics2dict,
+    recallmetrics2dict,
+    motmetrics2dict,
+)
+from poseval.evaluateAP import evaluateAP
+from poseval.evaluateTracking import evaluateTracking
 
 from .posetrack21_evaluator import PoseTrack21Evaluator as PTEvaluator
 
