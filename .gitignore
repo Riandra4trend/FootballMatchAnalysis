@@ -117,3 +117,7 @@ output_videos/
 # Model files
 models/
 runs/
+
+# Ignore custom output and data folders
+output/
+data/
