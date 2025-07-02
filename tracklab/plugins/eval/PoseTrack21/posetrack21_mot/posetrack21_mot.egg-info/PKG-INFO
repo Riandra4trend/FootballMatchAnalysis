@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: posetrack21_mot
+Version: 0.2
+Requires-Dist: shapely
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: scipy
+Requires-Dist: xmltodict
+Requires-Dist: tqdm
+Requires-Dist: lap
+Dynamic: requires-dist
