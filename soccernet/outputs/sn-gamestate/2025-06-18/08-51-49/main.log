@@ -1,0 +1,6 @@
+[2025-06-18 08:51:49,340][__main__][INFO] - Using device: 'cuda'.
+[2025-06-18 08:52:03,664][nbjw_calib.model.cls_hrnet][INFO] - => init weights from normal distribution
+[2025-06-18 08:52:06,675][nbjw_calib.model.cls_hrnet_l][INFO] - => init weights from normal distribution
+[2025-06-18 08:52:07,941][tracklab.pipeline.module][INFO] - Pipeline: YOLOv8 -> PRTReId -> BPBReIDStrongSORT -> NBJW_Calib_Keypoints -> NBJW_Calib -> MajorityVoteTracklet -> TrackletTeamClustering -> TrackletTeamSideLabeling
+[2025-06-18 08:52:07,943][__main__][INFO] - Starting tracking operation on valid set.
+[2025-06-18 08:52:07,945][tracklab.datastruct.tracker_state][INFO] - Saving TrackerState to /home/binabola2024/FootballMatchAnalysis/soccernet/outputs/sn-gamestate/2025-06-18/08-51-49/states/sn-gamestate.pklz

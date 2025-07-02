@@ -1,0 +1,19 @@
+[2025-07-02 14:42:21,354][__main__][INFO] - Using device: 'cuda'.
+[2025-07-02 14:42:38,394][nbjw_calib.model.cls_hrnet][INFO] - => init weights from normal distribution
+[2025-07-02 14:42:41,224][nbjw_calib.model.cls_hrnet_l][INFO] - => init weights from normal distribution
+[2025-07-02 14:42:46,593][tracklab.pipeline.module][INFO] - Pipeline: YOLOv8 -> PRTReId -> BPBReIDStrongSORT -> NBJW_Calib_Keypoints -> NBJW_Calib -> MMOCR -> MajorityVoteTracklet -> TrackletTeamClustering -> TrackletTeamSideLabeling
+[2025-07-02 14:42:46,597][sn_gamestate.reid.prtreid_dataset][INFO] - Loading train set...
+[2025-07-02 14:42:49,978][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed because too small samples (h<30 or w<30) = 3231
+[2025-07-02 14:42:50,006][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for uniform tracklet sampling = 9939
+[2025-07-02 14:42:50,009][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for not enough samples per id = 0
+[2025-07-02 14:42:50,013][sn_gamestate.reid.prtreid_dataset][INFO] - ReidDataset filtered size = 370
+[2025-07-02 14:42:50,017][sn_gamestate.reid.prtreid_dataset][INFO] - All detections used for ReID already have their image crop saved on disk.
+[2025-07-02 14:42:50,021][sn_gamestate.reid.prtreid_dataset][INFO] - Loading val set...
+[2025-07-02 14:42:53,428][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed because too small samples (h<0 or w<0) = 0
+[2025-07-02 14:42:53,456][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for uniform tracklet sampling = 12428
+[2025-07-02 14:42:53,459][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for not enough samples per id = 0
+[2025-07-02 14:42:53,462][sn_gamestate.reid.prtreid_dataset][INFO] - ReidDataset filtered size = 250
+[2025-07-02 14:42:53,466][sn_gamestate.reid.prtreid_dataset][INFO] - All detections used for ReID already have their image crop saved on disk.
+[2025-07-02 14:44:12,628][__main__][INFO] - Starting tracking operation on valid set.
+[2025-07-02 14:44:12,633][tracklab.datastruct.tracker_state][INFO] - Saving TrackerState to /home/binabola2024/FootballMatchAnalysis/soccernet/outputs/sn-gamestate/2025-07-02/14-42-21/states/sn-gamestate.pklz
+[2025-07-02 14:44:12,634][tracklab.pipeline.module][INFO] - Pipeline has been validated

@@ -1,0 +1,14 @@
+[2025-06-18 12:31:34,162][__main__][INFO] - Using device: 'cuda'.
+[2025-06-18 12:31:47,591][nbjw_calib.model.cls_hrnet][INFO] - => init weights from normal distribution
+[2025-06-18 12:31:49,972][nbjw_calib.model.cls_hrnet_l][INFO] - => init weights from normal distribution
+[2025-06-18 12:31:54,376][tracklab.pipeline.module][INFO] - Pipeline: YOLOv8 -> PRTReId -> BPBReIDStrongSORT -> NBJW_Calib_Keypoints -> NBJW_Calib -> MMOCR -> MajorityVoteTracklet -> TrackletTeamClustering -> TrackletTeamSideLabeling
+[2025-06-18 12:31:54,378][__main__][INFO] - Starting tracking operation on valid set.
+[2025-06-18 12:31:54,380][tracklab.datastruct.tracker_state][INFO] - Saving TrackerState to /home/binabola2024/FootballMatchAnalysis/soccernet/outputs/sn-gamestate/2025-06-18/12-31-33/states/sn-gamestate.pklz
+[2025-06-18 12:31:54,382][tracklab.pipeline.module][INFO] - Pipeline has been validated
+[2025-06-18 12:48:33,879][__main__][INFO] - Starting evaluation.
+[2025-06-18 12:48:33,881][tracklab.wrappers.eval.trackeval_evaluator][INFO] - Starting evaluation using TrackEval library (https://github.com/JonathonLuiten/TrackEval)
+[2025-06-18 12:48:36,260][tracklab.wrappers.eval.trackeval_evaluator][INFO] - Tracking predictions saved in SoccerNetGS format in eval/pred/SoccerNetGS-valid/tracklab
+[2025-06-18 12:48:36,262][tracklab.wrappers.eval.trackeval_evaluator][INFO] - Tracking ground truth saved in SoccerNetGS format in eval/gt/SoccerNetGS-valid
+[2025-06-18 12:48:38,530][tracklab.wrappers.datasets.soccernet.soccernet_game_state][INFO] - SoccerNet Game State Reconstruction performance GS-HOTA = 37.623% (config: EVAL_SPACE=pitch, USE_JERSEY_NUMBERS=True, USE_TEAMS=False, USE_ROLES=False, EVAL_DIST_TOL=5)
+[2025-06-18 12:48:38,533][tracklab.wrappers.datasets.soccernet.soccernet_game_state][INFO] - Have a look at 'tracklab/tracklab/configs/dataset/soccernet_gs.yaml' for more details about the GS-HOTA metric and the evaluation configuration.
+[2025-06-18 12:48:38,534][__main__][INFO] - Saved state at : /home/binabola2024/FootballMatchAnalysis/soccernet/outputs/sn-gamestate/2025-06-18/12-31-33/states/sn-gamestate.pklz

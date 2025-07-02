@@ -1,0 +1,16 @@
+[2025-06-19 08:23:06,401][__main__][INFO] - Using device: 'cuda'.
+[2025-06-19 08:23:55,234][tracklab.pipeline.module][INFO] - Pipeline: PRTReId
+[2025-06-19 08:23:55,240][sn_gamestate.reid.prtreid_dataset][INFO] - Loading train set...
+[2025-06-19 08:24:16,426][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed because too small samples (h<30 or w<30) = 162556
+[2025-06-19 08:24:17,897][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for uniform tracklet sampling = 550359
+[2025-06-19 08:24:17,907][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for not enough samples per id = 19
+[2025-06-19 08:24:18,015][sn_gamestate.reid.prtreid_dataset][INFO] - ReidDataset filtered size = 20067
+[2025-06-19 08:24:18,179][sn_gamestate.reid.prtreid_dataset][INFO] - All detections used for ReID already have their image crop saved on disk.
+[2025-06-19 08:24:18,276][sn_gamestate.reid.prtreid_dataset][INFO] - Loading val set...
+[2025-06-19 08:24:39,776][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed because too small samples (h<0 or w<0) = 0
+[2025-06-19 08:24:41,417][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for uniform tracklet sampling = 734442
+[2025-06-19 08:24:41,424][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for not enough samples per id = 3
+[2025-06-19 08:24:41,488][sn_gamestate.reid.prtreid_dataset][INFO] - ReidDataset filtered size = 14221
+[2025-06-19 08:24:41,653][sn_gamestate.reid.prtreid_dataset][INFO] - All detections used for ReID already have their image crop saved on disk.
+[2025-06-19 09:24:43,078][__main__][INFO] - Starting tracking operation on valid set.
+[2025-06-19 09:24:43,082][tracklab.datastruct.tracker_state][INFO] - Saving TrackerState to /home/binabola2024/FootballMatchAnalysis/soccernet/outputs/sn-gamestate/2025-06-19/08-23-06/states/sn-gamestate.pklz

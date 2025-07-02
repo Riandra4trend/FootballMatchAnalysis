@@ -1,0 +1,14 @@
+[2025-06-19 07:38:13,637][__main__][INFO] - Using device: 'cuda'.
+[2025-06-19 07:39:02,082][tracklab.pipeline.module][INFO] - Pipeline: PRTReId
+[2025-06-19 07:39:02,089][sn_gamestate.reid.prtreid_dataset][INFO] - Loading train set...
+[2025-06-19 07:39:23,531][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed because too small samples (h<30 or w<30) = 162556
+[2025-06-19 07:39:24,984][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for uniform tracklet sampling = 550359
+[2025-06-19 07:39:24,994][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for not enough samples per id = 19
+[2025-06-19 07:39:25,102][sn_gamestate.reid.prtreid_dataset][INFO] - ReidDataset filtered size = 20067
+[2025-06-19 07:39:25,259][sn_gamestate.reid.prtreid_dataset][INFO] - All detections used for ReID already have their image crop saved on disk.
+[2025-06-19 07:39:25,349][sn_gamestate.reid.prtreid_dataset][INFO] - Loading val set...
+[2025-06-19 07:39:46,831][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed because too small samples (h<0 or w<0) = 0
+[2025-06-19 07:39:48,479][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for uniform tracklet sampling = 734442
+[2025-06-19 07:39:48,485][sn_gamestate.reid.prtreid_dataset][WARNING] - ReidDataset removed for not enough samples per id = 3
+[2025-06-19 07:39:48,552][sn_gamestate.reid.prtreid_dataset][INFO] - ReidDataset filtered size = 14221
+[2025-06-19 07:39:48,717][sn_gamestate.reid.prtreid_dataset][INFO] - All detections used for ReID already have their image crop saved on disk.

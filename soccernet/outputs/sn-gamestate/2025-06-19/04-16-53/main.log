@@ -1,0 +1,4 @@
+[2025-06-19 04:16:53,726][__main__][INFO] - Using device: 'cuda'.
+[2025-06-19 04:17:11,750][tracklab.pipeline.module][INFO] - Pipeline: PRTReId
+[2025-06-19 04:17:11,755][__main__][INFO] - Starting tracking operation on valid set.
+[2025-06-19 04:17:11,757][tracklab.datastruct.tracker_state][INFO] - Saving TrackerState to /home/binabola2024/FootballMatchAnalysis/soccernet/outputs/sn-gamestate/2025-06-19/04-16-53/states/sn-gamestate.pklz

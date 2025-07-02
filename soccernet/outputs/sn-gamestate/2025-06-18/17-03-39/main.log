@@ -1,0 +1,14 @@
+[2025-06-18 17:03:39,427][__main__][INFO] - Using device: 'cuda'.
+[2025-06-18 17:04:00,511][nbjw_calib.model.cls_hrnet][INFO] - => init weights from normal distribution
+[2025-06-18 17:04:03,360][nbjw_calib.model.cls_hrnet_l][INFO] - => init weights from normal distribution
+[2025-06-18 17:04:11,630][tracklab.pipeline.module][INFO] - Pipeline: YOLOv8 -> PRTReId -> ByteTrack -> NBJW_Calib_Keypoints -> NBJW_Calib -> MMOCR
+[2025-06-18 17:04:11,633][__main__][INFO] - Starting tracking operation on valid set.
+[2025-06-18 17:04:11,635][tracklab.datastruct.tracker_state][INFO] - Saving TrackerState to /home/binabola2024/FootballMatchAnalysis/soccernet/outputs/sn-gamestate/2025-06-18/17-03-39/states/sn-gamestate.pklz
+[2025-06-18 17:04:11,636][tracklab.pipeline.module][INFO] - Pipeline has been validated
+[2025-06-18 17:15:02,049][__main__][INFO] - Starting evaluation.
+[2025-06-18 17:15:02,052][tracklab.wrappers.eval.trackeval_evaluator][INFO] - Starting evaluation using TrackEval library (https://github.com/JonathonLuiten/TrackEval)
+[2025-06-18 17:15:04,380][tracklab.wrappers.eval.trackeval_evaluator][INFO] - Tracking predictions saved in SoccerNetGS format in eval/pred/SoccerNetGS-valid/tracklab
+[2025-06-18 17:15:04,383][tracklab.wrappers.eval.trackeval_evaluator][INFO] - Tracking ground truth saved in SoccerNetGS format in eval/gt/SoccerNetGS-valid
+[2025-06-18 17:15:06,736][tracklab.wrappers.datasets.soccernet.soccernet_game_state][INFO] - SoccerNet Game State Reconstruction performance GS-HOTA = 51.535% (config: EVAL_SPACE=pitch, USE_JERSEY_NUMBERS=False, USE_TEAMS=False, USE_ROLES=False, EVAL_DIST_TOL=5)
+[2025-06-18 17:15:06,739][tracklab.wrappers.datasets.soccernet.soccernet_game_state][INFO] - Have a look at 'tracklab/tracklab/configs/dataset/soccernet_gs.yaml' for more details about the GS-HOTA metric and the evaluation configuration.
+[2025-06-18 17:15:06,741][__main__][INFO] - Saved state at : /home/binabola2024/FootballMatchAnalysis/soccernet/outputs/sn-gamestate/2025-06-18/17-03-39/states/sn-gamestate.pklz
