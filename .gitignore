@@ -119,5 +119,5 @@ models/
 runs/
 
 # Ignore custom output and data folders
-output/
+outputs/
 data/
